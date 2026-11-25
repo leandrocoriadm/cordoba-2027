@@ -25,22 +25,16 @@ body {
 
 .board-title {
   display: grid;
-  min-height: 34.6cqi;
-  padding: 12px;
   place-items: center;
-  border-radius: 2px;
-  background: rgb(35 34 29 / 29%);
-  text-align: center;
+  margin: 0;
 }
 
-.board-title h1 {
-  margin: 0;
-  color: #0a0a09;
-  font-size: clamp(1.45rem, 8cqi, 2.5rem);
-  font-weight: 400;
-  letter-spacing: -0.055em;
-  line-height: 1.15;
-  text-transform: uppercase;
+.board-title img {
+  display: block;
+  width: 68%;
+  height: 34.6cqi;
+  object-fit: cover;
+  filter: drop-shadow(0 1px 2px rgb(50 82 91 / 45%));
 }
 
 .tiles {
