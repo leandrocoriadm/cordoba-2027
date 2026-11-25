@@ -25,10 +25,13 @@ function readTile(number) {
 function renderTile(button, number) {
   const tile = readTile(number);
   const owner = people.find((person) => person.dataset.person === tile?.owner)?.dataset.person;
+  const pending = Boolean(tile) && !owner;
+  button.toggleAttribute("data-pending", pending);
   button.dataset.owner = owner ?? "";
   button.textContent = owner?.[0] ?? number;
   const details = tile ? `: ${tile.clue}` : "";
-  button.setAttribute("aria-label", `Casillero ${number}${details}${owner ? `, encontrado por ${owner}` : ""}`);
+  const status = owner ? `, encontrado por ${owner}` : pending ? ", pendiente de asignar" : "";
+  button.setAttribute("aria-label", `Casillero ${number}${details}${status}`);
 }
 
 function renderSelection(foundBy) {
