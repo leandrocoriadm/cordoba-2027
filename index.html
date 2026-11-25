@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
+  <meta name="theme-color" content="#faf5eb">
+  <title>Cordoba 2027</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="loteria.js"></script>
+</head>
+<body>
+  <main class="board">
+    <header class="board-title">
+      <h1>Cordoba 2027</h1>
+    </header>
+
+    <section class="tiles" aria-label="Casilleros de la lotería">
+      <button type="button">1</button>
+      <button type="button">2</button>
+      <button type="button">3</button>
+      <button type="button">4</button>
+      <button type="button">5</button>
+      <button type="button">6</button>
+      <button type="button">7</button>
+      <button type="button">8</button>
+      <button type="button">9</button>
+      <button type="button">10</button>
+      <button type="button">11</button>
+      <button type="button">12</button>
+      <button type="button">13</button>
+      <button type="button">14</button>
+      <button type="button">15</button>
+      <button type="button">16</button>
+    </section>
+  </main>
+
+  <dialog class="tile-dialog" aria-labelledby="dialog-title">
+    <form class="tile-form">
+      <div class="tile-dialog-card">
+        <button class="close-dialog" type="button" aria-label="Cerrar"><span aria-hidden="true"></span></button>
+        <h2 id="dialog-title" tabindex="-1" autofocus></h2>
+
+        <label class="clue-field" hidden>
+          <textarea id="clue" rows="1" aria-labelledby="dialog-title"></textarea>
+        </label>
+
+        <div class="person-options" role="group" aria-label="Quién lo encontró" hidden>
+          <button type="button" data-person="Lean" aria-pressed="false">Lean</button>
+          <button type="button" data-person="Ori" aria-pressed="false">Ori</button>
+        </div>
+      </div>
+      <button class="confirm-tile" type="submit" hidden>Confirmar</button>
+      <p class="storage-error" role="alert" hidden>No se pudo guardar en el navegador. Volvé a intentar.</p>
+    </form>
+  </dialog>
+</body>
+</html>

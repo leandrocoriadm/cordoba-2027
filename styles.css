@@ -1,0 +1,441 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.55, 0, 0.85, 0.45);
+}
+
+body {
+  margin: 0;
+  background: #f5eee2;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.board {
+  container-type: inline-size;
+  width: min(100%, 537px);
+  min-height: 100vh;
+  min-height: 100svh;
+  margin-inline: auto;
+  padding: clamp(14px, 4.45vw, 24px) clamp(12px, 3.72vw, 20px) 32px;
+  background: linear-gradient(156deg, #fff 0%, #f6ecdb 33%, #e4b371 100%);
+}
+
+.board-title {
+  display: grid;
+  min-height: 34.6cqi;
+  padding: 12px;
+  place-items: center;
+  border-radius: 2px;
+  background: rgb(35 34 29 / 29%);
+  text-align: center;
+}
+
+.board-title h1 {
+  margin: 0;
+  color: #0a0a09;
+  font-size: clamp(1.45rem, 8cqi, 2.5rem);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2.6cqi 2.2cqi;
+  margin-top: 8cqi;
+}
+
+.tiles button {
+  display: grid;
+  aspect-ratio: 1;
+  min-width: 0;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 2.4cqi;
+  background: linear-gradient(180deg, rgb(224 166 93 / 10%), rgb(224 158 79 / 38%));
+  box-shadow: inset 0 2px 2px rgb(132 83 29 / 23%), inset 0 0 0 1px rgb(173 113 45 / 13%);
+  color: #a46325;
+  font: 800 clamp(1.45rem, 10.8cqi, 3.375rem) / 1 "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: -0.055em;
+  cursor: pointer;
+}
+
+.tiles button:focus-visible {
+  outline: 2px solid #754215;
+  outline-offset: 2px;
+}
+
+.tiles button:active {
+  background: rgb(216 151 72 / 48%);
+}
+
+:is(.tiles, .tile-dialog) button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: scale 240ms var(--ease-out), filter 240ms var(--ease-out);
+}
+
+:is(.tiles, .tile-dialog) button:active {
+  scale: 0.95;
+  filter: brightness(0.94);
+  transition-duration: 90ms;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :is(.tiles, .tile-dialog) button:hover:not(:active) {
+    filter: brightness(1.04);
+  }
+}
+
+.tiles button[data-owner="Lean"] {
+  background: linear-gradient(#c5aa8a, #b2916c);
+  color: #fff8eb;
+}
+
+.tiles button[data-owner="Ori"] {
+  background: linear-gradient(#faf7ef, #fcf5e6);
+  color: #6e5b45;
+}
+
+body:has(.tile-dialog[open]) {
+  overflow: hidden;
+}
+
+.tile-dialog {
+  --cream: #fbf3e1;
+  --ink: #78644e;
+  position: fixed;
+  inset: 0;
+  width: min(100%, 537px);
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: auto;
+  overscroll-behavior: contain;
+  opacity: 0;
+  transition: opacity 160ms var(--ease-in), display 160ms allow-discrete, overlay 160ms allow-discrete;
+}
+
+.tile-dialog[open] {
+  opacity: 1;
+  transition-duration: 0s;
+}
+
+.tile-dialog:not([open]),
+.tile-dialog:not([open])::backdrop {
+  pointer-events: none;
+}
+
+.tile-dialog::backdrop {
+  background: rgb(24 19 12 / 57%);
+  opacity: 0;
+  transition: opacity 160ms var(--ease-in), display 160ms allow-discrete, overlay 160ms allow-discrete;
+}
+
+.tile-dialog[open]::backdrop {
+  opacity: 1;
+  transition: opacity 320ms var(--ease-out);
+}
+
+@starting-style {
+  .tile-dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+.tile-form {
+  container-type: inline-size;
+  width: 83.333%;
+  margin: max(30px, min(27.5svh, calc(100dvh - min(105vw, 560px)))) auto 16px;
+  transform-origin: 50% 35%;
+  translate: 0 6px;
+  scale: 0.98;
+  transition: translate 160ms var(--ease-in), scale 160ms var(--ease-in);
+}
+
+.tile-dialog[open] .tile-form {
+  translate: 0;
+  scale: 1;
+  transition: translate 420ms var(--ease-out), scale 420ms var(--ease-out);
+  animation: dialog-fade-in 280ms var(--ease-out) both;
+}
+
+@starting-style {
+  .tile-dialog[open] .tile-form {
+    translate: 0 18px;
+    scale: 0.93;
+  }
+}
+
+.tile-dialog[open] :is(h2, .clue-field, .close-dialog) {
+  animation: block-enter 360ms var(--ease-out) var(--enter-delay, 65ms) both;
+}
+
+.tile-dialog .clue-field {
+  --enter-delay: 125ms;
+}
+
+.tile-dialog .close-dialog {
+  --enter-delay: 215ms;
+}
+
+@keyframes dialog-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes block-enter {
+  from {
+    opacity: 0;
+    translate: 0 var(--enter-distance, 9px);
+  }
+  to {
+    opacity: 1;
+    translate: 0;
+  }
+}
+
+.tile-dialog[data-mode="create"] .tile-form {
+  margin-top: max(30px, min(28svh, calc(100dvh - min(105vw, 560px))));
+}
+
+.tile-dialog-card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 4.2cqi;
+  padding: 4.4cqi 3.2cqi 4.2cqi;
+  border-radius: 7.5cqi;
+  background: linear-gradient(147deg, #e3d2b9 55%, #d2bfa5 80%, #b6a289);
+}
+
+.tile-dialog h2 {
+  display: grid;
+  place-content: center;
+  min-height: 42cqi;
+  margin: 0;
+  padding: 4cqi;
+  border-radius: 7.5cqi;
+  background: linear-gradient(135deg, #c9a984, #cbb092);
+  color: #fff3e6;
+  font-size: clamp(1.375rem, 9.45cqi, 2.65rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.96;
+  overflow-wrap: anywhere;
+  text-align: center;
+  white-space: pre-wrap;
+}
+
+.tile-dialog h2:focus {
+  outline: none;
+}
+
+.tile-dialog[data-mode="create"] h2 {
+  min-height: 28cqi;
+  padding-block: 2.5cqi;
+  background: transparent;
+  color: var(--ink);
+}
+
+.tile-dialog button {
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.tile-dialog :focus-visible {
+  outline: 2px solid #805323;
+  outline-offset: 3px;
+}
+
+.close-dialog {
+  position: absolute;
+  top: -7cqi;
+  right: -4.5cqi;
+  display: grid;
+  width: max(44px, 13.4cqi);
+  aspect-ratio: 1;
+  padding: 0;
+  place-items: center;
+  border-radius: 50%;
+  background: #50340f;
+  color: #eddbc1;
+}
+
+.close-dialog span {
+  position: relative;
+  width: 62%;
+  height: 62%;
+}
+
+.close-dialog span::before,
+.close-dialog span::after {
+  position: absolute;
+  inset: 0;
+  width: 18%;
+  height: 100%;
+  margin: auto;
+  border-radius: 999px;
+  background: currentColor;
+  content: "";
+  transform: rotate(37deg);
+}
+
+.close-dialog span::after {
+  transform: rotate(-37deg);
+}
+
+.clue-field {
+  display: grid;
+  min-height: 58cqi;
+  align-content: center;
+  padding: 4cqi;
+  border-radius: 7.5cqi;
+  background: linear-gradient(147deg, var(--cream) 35%, #ebdcc2);
+  cursor: text;
+}
+
+.clue-field textarea {
+  width: 100%;
+  min-height: 1lh;
+  max-height: 46cqi;
+  padding: 0;
+  resize: none;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  field-sizing: content;
+  font-family: inherit;
+  font-size: clamp(1.375rem, 9.45cqi, 2.65rem);
+  font-weight: 300;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.clue-field:has(textarea:focus-visible) {
+  box-shadow: inset 0 0 0 2px #9a7954;
+}
+
+.clue-field textarea:focus-visible {
+  outline: none;
+}
+
+.person-options {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 4.2cqi;
+  transition: grid-template-columns 360ms var(--ease-out), gap 360ms var(--ease-out);
+}
+
+.person-options[data-selected="Lean"] {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0fr);
+  gap: 0;
+}
+
+.person-options[data-selected="Ori"] {
+  grid-template-columns: minmax(0, 0fr) minmax(0, 1fr);
+  gap: 0;
+}
+
+.person-options button {
+  min-width: 0;
+  min-height: 44.7cqi;
+  padding: 0;
+  overflow: clip;
+  border-radius: 7.5cqi;
+  background: linear-gradient(147deg, var(--cream) 30%, #ebdcc2);
+  color: var(--ink);
+  font-size: clamp(1.375rem, 9.45cqi, 2.65rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  transition: scale 240ms var(--ease-out), filter 240ms var(--ease-out),
+    visibility 0s, opacity 180ms var(--ease-out);
+}
+
+.person-options button[inert] {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 120ms ease-out, visibility 0s 120ms;
+}
+
+.tile-dialog[open] .person-options button:where(:not([inert])) {
+  animation: block-enter 330ms var(--ease-out) var(--enter-delay, 125ms) backwards;
+}
+
+.person-options [data-person="Ori"] {
+  --enter-delay: 180ms;
+}
+
+.person-options [data-person="Lean"] {
+  background: linear-gradient(145deg, #cdb698, #bb9d7b);
+  color: #6c5439;
+}
+
+.person-options[data-selected=""] [aria-pressed="true"] {
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
+.confirm-tile {
+  display: block;
+  width: 100%;
+  min-height: 24cqi;
+  margin-top: -7.5cqi;
+  padding: 8cqi 2cqi 1.5cqi;
+  border-radius: 0 0 7.5cqi 7.5cqi;
+  background: linear-gradient(155deg, #654013, #36240d);
+  color: #ffdbab;
+  font-size: clamp(1.375rem, 9.45cqi, 2.65rem);
+  font-weight: 700;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.tile-dialog[open] .confirm-tile:not([hidden]) {
+  --enter-distance: -12px;
+  animation: block-enter 340ms var(--ease-out) 45ms both;
+}
+
+.storage-error {
+  margin: 8px 0 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--cream);
+  color: #50340f;
+}
+
+.tile-dialog [hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.tiles, .tile-dialog) button,
+  .tile-dialog,
+  .tile-dialog[open],
+  .tile-dialog::backdrop,
+  .tile-dialog[open]::backdrop,
+  .tile-dialog .tile-form,
+  .tile-dialog[open] .tile-form,
+  .tile-dialog .person-options,
+  .tile-dialog[open] .person-options button[inert] {
+    transition: none;
+  }
+
+  .tile-dialog[open] :is(.tile-form, h2, .clue-field, .person-options button, .close-dialog, .confirm-tile:not([hidden])) {
+    animation: none;
+  }
+
+  :is(.tiles, .tile-dialog) button:active {
+    scale: 1;
+  }
+}
